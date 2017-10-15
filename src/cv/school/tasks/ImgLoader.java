@@ -7,7 +7,7 @@ package cv.school.tasks;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.HashMap;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -21,8 +21,8 @@ public class ImgLoader {
      * @param dirPath путь до директории, содержащей изображения
      * @return коллекция объектов загруженных изображений
      */
-    public static ArrayList<Mat> loadData(Path dirPath) {
-        ArrayList<Mat> resultList = new ArrayList<>();
+    public static HashMap<String, Mat> loadData(Path dirPath) {
+        HashMap<String, Mat> resultList = new HashMap<>();
         
         File dir = dirPath.toFile();
         // Получаем список файлов внутри каталога
@@ -35,7 +35,7 @@ public class ImgLoader {
                 if (extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("png") ||
                         extention.equalsIgnoreCase("bmp"))
                 {
-                    resultList.add(Imgcodecs.imread(child.getPath()));
+                    resultList.put(filename,Imgcodecs.imread(child.getPath()));
                 }
             }
         }
