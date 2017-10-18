@@ -5,11 +5,15 @@
  */
 package cv.school.tasks;
 
+import cv.school.tasks.imgaligner.ImgAligner;
 import cv.school.tasks.movdetector.MovDetector;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
 /**
  *
@@ -31,22 +35,35 @@ public class CvSchoolTasks {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
         // Проверка на количество аргументов командной строки
-        if (args.length != 1) {
-            System.out.println("Использование: run <target>");
-            System.out.println("<target> - видео");
+        if (args.length != 2) {
+            System.out.println("Использование: run <source> <target>");
+            System.out.println("<source> - папка с необработанными изображениями");
+            System.out.println("<source> - папка с обработанными изображениями");
             return;
         }
         
-        String data_dir = args[0];
-        
-        Path path = Paths.get(data_dir);
-        if (Files.notExists(path)) {
-            System.out.println("Видео не найдено");
+        String dataDir = args[0];    
+        Path dataPath = Paths.get(dataDir);
+        if (Files.notExists(dataPath)) {
+            System.out.println("Папка с рисунками не найдена");
             return;
         }
         
-        // Подгружаем видео из файла и обрабатываем его
-        MovDetector.Detect(VideoLoader.loadFromFile(path));
-   //     MovDetector.Detect(VideoLoader.loadFromCam());
+        String resDir = args[1];
+        Path resPath = Paths.get(resDir);
+        
+        // Вычисляем совмещенные изображения
+        alignImages(dataPath, resPath);
+    }
+    
+    public static void alignImages(Path src, Path dst)
+    {
+        HashMap<String, Mat> images = ImgLoader.loadData(src);
+        for (Entry<String, Mat> entry : images.entrySet())
+        {
+            System.out.println(String.format("Обрабатываем %s ...",entry.getKey()));      
+            // Получаем изображение
+            ImgAligner.getAlignedImage(entry.getValue());
+        }
     }
 }
