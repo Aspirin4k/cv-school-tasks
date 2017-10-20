@@ -6,7 +6,6 @@
 package cv.school.tasks.movdetector;
 
 import cv.school.tasks.ExtraFunctions;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +46,7 @@ public class MovDetector {
     /**
      * Обнаруживает движение на видео
      * @param cap поток видео данных
+     * @throws java.lang.Exception
      */
     public static void Detect(VideoCapture cap) throws Exception {
         // Объект содержит каждый отдельный кадр

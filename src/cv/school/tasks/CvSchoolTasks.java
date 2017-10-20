@@ -7,6 +7,7 @@ package cv.school.tasks;
 
 import cv.school.tasks.imgaligner.ImgAligner;
 import cv.school.tasks.movdetector.MovDetector;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  *
@@ -30,22 +32,23 @@ public class CvSchoolTasks {
 
     /**
      * @param args аргументы командной строки. Ожидается 1 аргумент - папка с изображениями
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
         // Проверка на количество аргументов командной строки
         if (args.length != 2) {
-            System.out.println("Использование: run <source> <target>");
+            System.out.println("Использование: cv-school-tasks <source> <target>");
             System.out.println("<source> - папка с необработанными изображениями");
-            System.out.println("<source> - папка с обработанными изображениями");
+            System.out.println("<target> - папка с обработанными изображениями");
             return;
         }
         
         String dataDir = args[0];    
         Path dataPath = Paths.get(dataDir);
         if (Files.notExists(dataPath)) {
-            System.out.println("Папка с рисунками не найдена");
+            System.out.println(String.format("Папка %s с рисунками не найдена", dataDir));
             return;
         }
         
@@ -56,14 +59,26 @@ public class CvSchoolTasks {
         alignImages(dataPath, resPath);
     }
     
-    public static void alignImages(Path src, Path dst)
+    /**
+     * Метод вычисляет для каждого изображения из исходной папки совмещенное изображение
+     * @param src директория с исходными изображениями
+     * @param dst дриектория, куда будут помещены результаты
+     * @throws IOException 
+     */
+    public static void alignImages(Path src, Path dst) throws IOException
     {
         HashMap<String, Mat> images = ImgLoader.loadData(src);
+        
+        // Создаем папки, если их нет
+        if (Files.notExists(dst)) Files.createDirectories(dst);
+        
         for (Entry<String, Mat> entry : images.entrySet())
         {
             System.out.println(String.format("Обрабатываем %s ...",entry.getKey()));      
             // Получаем изображение
-            ImgAligner.getAlignedImage(entry.getValue());
+            Mat alignedImg = ImgAligner.getAlignedImage(entry.getValue());
+            
+            Imgcodecs.imwrite(String.format("%s/aligned_%s", dst.toAbsolutePath(), entry.getKey()), alignedImg);
         }
     }
 }
