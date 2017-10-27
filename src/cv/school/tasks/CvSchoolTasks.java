@@ -7,6 +7,7 @@ package cv.school.tasks;
 
 import cv.school.tasks.imgaligner.ImgAligner;
 import cv.school.tasks.movdetector.MovDetector;
+import cv.school.tasks.traincreator.TrainCreator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,25 +39,30 @@ public class CvSchoolTasks {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
         // Проверка на количество аргументов командной строки
-        if (args.length != 2) {
-            System.out.println("Использование: cv-school-tasks <source> <target>");
-            System.out.println("<source> - папка с необработанными изображениями");
-            System.out.println("<target> - папка с обработанными изображениями");
-            return;
-        }
-        
-        String dataDir = args[0];    
-        Path dataPath = Paths.get(dataDir);
-        if (Files.notExists(dataPath)) {
-            System.out.println(String.format("Папка %s с рисунками не найдена", dataDir));
-            return;
-        }
-        
-        String resDir = args[1];
-        Path resPath = Paths.get(resDir);
+//        if (args.length != 2) {
+//            System.out.println("Использование: cv-school-tasks <source> <target>");
+//            System.out.println("<source> - папка с необработанными изображениями");
+//            System.out.println("<target> - папка с обработанными изображениями");
+//            return;
+//        }
+//        
+//        String dataDir = args[0];    
+//        Path dataPath = Paths.get(dataDir);
+//        if (Files.notExists(dataPath)) {
+//            System.out.println(String.format("Папка %s с рисунками не найдена", dataDir));
+//            return;
+//        }
+//        
+//        String resDir = args[1];
+//        Path resPath = Paths.get(resDir);
         
         // Вычисляем совмещенные изображения
-        alignImages(dataPath, resPath);
+        // alignImages(dataPath, resPath);
+    
+        // Создание трейн сета
+        Path path = Paths.get(args[0]).toAbsolutePath();
+        TrainCreator creator = new TrainCreator();
+        creator.start(path);
     }
     
     /**

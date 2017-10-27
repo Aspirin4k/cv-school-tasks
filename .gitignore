@@ -3,9 +3,6 @@
 /fire
 /dist
 /task*
-easy*
-medium*
-hard*
-output*
 manifest.mf
 build.xml
+*.wmv
