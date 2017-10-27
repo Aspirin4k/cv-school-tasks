@@ -5,4 +5,4 @@
 /task*
 manifest.mf
 build.xml
-*.wmv
+*.wmv*.log

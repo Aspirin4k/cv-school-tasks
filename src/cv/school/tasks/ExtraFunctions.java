@@ -81,4 +81,19 @@ public class ExtraFunctions {
         array[i] = array[j];
         array[j] = buffer;
     }
+    
+    /**
+     * Конвертирует 4 байта из массива по данному смещению в целочисленное 4-х байтовое
+     * @param bytes массив байт
+     * @param offset смещение
+     * @return целочисленное
+     */
+    public static int toInt(byte[] bytes, int offset) {
+        int ret = 0;
+        for (int i=0; i<4 && i+offset<bytes.length; i++) {
+          ret <<= 8;
+          ret |= (int)bytes[i+offset] & 0xFF;
+        }
+        return ret;
+    }
 }
