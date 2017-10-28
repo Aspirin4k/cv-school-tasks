@@ -9,3 +9,4 @@ hard*
 output*
 manifest.mf
 build.xml
+*.log
