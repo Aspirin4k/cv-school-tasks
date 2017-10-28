@@ -6,6 +6,7 @@
 package cv.school.tasks;
 
 import cv.school.tasks.digmodel.DigModel;
+import cv.school.tasks.digmodel.DigModel.Set;
 import cv.school.tasks.imgaligner.ImgAligner;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,9 +39,13 @@ public class CvSchoolTasks {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
         DigModel model = new DigModel();
-        model.parseFiles(Paths.get("train-labels.idx1-ubyte"));
-        model.parseFiles(Paths.get("train-images.idx3-ubyte"));
-        model.writeToDisk(Paths.get("output"));
+        model.buildModel(Paths.get("train-labels.idx1-ubyte"),Paths.get("train-images.idx3-ubyte"));
+        model.testModel(Paths.get("train-labels.idx1-ubyte"),Paths.get("train-images.idx3-ubyte"));
+        model.testModel(Paths.get("t10k-labels.idx1-ubyte"),Paths.get("t10k-images.idx3-ubyte"));
+        System.out.println("Проверяем самопальные цифры...");
+        model.testModel(ImgLoader.loadData(Paths.get("handmade")));
+        
+   //     model.writeToDisk(Paths.get("output"));
     }
     
     /**
