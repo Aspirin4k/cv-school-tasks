@@ -93,10 +93,12 @@ public class DigModel {
         for (int i=0; i < count; i++) {
             double[] pixels = new double[pixelsCount];
             for (int j=0; j< pixelsCount; j++) {
-                pixels[j] = data[j+offset];
+                pixels[j] = (data[j+offset] + 256) % 256;
             }
             offset += pixelsCount;
-            this.images.add(new Mat(height, width, CvType.CV_8UC1, new Scalar(pixels)));
+            Mat mat = new Mat(height, width, CvType.CV_8UC1);
+            mat.put(0, 0, pixels);
+            this.images.add(mat);
         }
         
         return offset;

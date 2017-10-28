@@ -1,8 +1,3 @@
-/build
-/nbproject
-/fire
-/dist
-/task*
-manifest.mf
-build.xml
-*.wmv*.log
+*.*
+!/src/*
+!.gitignore
