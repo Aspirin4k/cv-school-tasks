@@ -218,7 +218,7 @@ public class DigModel {
             instance.toArray(fn);
             
             double predicted = Linear.predict(model, fn);
-            System.out.println(String.format("Распознали %f как %f", num, predicted));
+            System.out.println(String.format("Распознали %.0f как %.0f", num, predicted));
             if (predicted == num)
             {
                 k++;
