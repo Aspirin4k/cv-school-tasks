@@ -16,7 +16,7 @@ Macroscop School 2017
 
 * [OpenCV](https://opencv.org/releases.html) для Java
 * [liblinear](https://www.csie.ntu.edu.tw/~cjlin/liblinear/) для Java. Используется в задании 4
-* [jackson-core(http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.2/). Нужен для загрузки конфигурации для TrainCreator
+* [jackson-core](http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.2/). Нужен для загрузки конфигурации для TrainCreator
 
 # Известные проблемы
 
