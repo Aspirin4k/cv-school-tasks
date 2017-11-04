@@ -5,6 +5,9 @@
  */
 package cv.school.tasks.traincreator;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
@@ -13,10 +16,14 @@ import javax.swing.JLabel;
  */
 public class TrainCreatorForm extends javax.swing.JFrame {
 
+    private final TrainCreator observer;
+    
     /**
      * Creates new form TrainCreatirForm
+     * @param obj
      */
-    public TrainCreatorForm() {
+    public TrainCreatorForm(TrainCreator obj) {
+        this.observer = obj;
         initComponents();
     }
 
@@ -29,36 +36,69 @@ public class TrainCreatorForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        pauseBuffout = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        labelFrameNum = new javax.swing.JLabel();
         imgLabel = new javax.swing.JLabel();
+        butSpeedUp = new javax.swing.JButton();
+        butSpeedDown = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        jButton1.setText("Step");
+        pauseBuffout.setText("Stop/Run");
+        pauseBuffout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pauseBuffoutActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Frame:");
 
-        jLabel2.setText("_");
+        labelFrameNum.setText("_");
 
-        imgLabel.setText("jLabel3");
+        imgLabel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                imgLabelMouseMoved(evt);
+            }
+        });
+        imgLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                imgLabelMouseClicked(evt);
+            }
+        });
+
+        butSpeedUp.setText("+");
+        butSpeedUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butSpeedUpActionPerformed(evt);
+            }
+        });
+
+        butSpeedDown.setText("-");
+        butSpeedDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butSpeedDownActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelFrameNum, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pauseBuffout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(butSpeedDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(butSpeedUp, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -67,60 +107,64 @@ public class TrainCreatorForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(11, 11, 11)
-                .addComponent(jButton1)
-                .addContainerGap(241, Short.MAX_VALUE))
-            .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelFrameNum))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pauseBuffout)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(butSpeedUp)
+                    .addComponent(butSpeedDown))
+                .addContainerGap(425, Short.MAX_VALUE))
+            .addComponent(imgLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TrainCreatorForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TrainCreatorForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TrainCreatorForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TrainCreatorForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void pauseBuffoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseBuffoutActionPerformed
+        // TODO add your handling code here:
+        this.observer.notifyPause();
+    }//GEN-LAST:event_pauseBuffoutActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TrainCreatorForm().setVisible(true);
-            }
-        });
-    }
+    private void imgLabelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imgLabelMouseMoved
+        // TODO add your handling code here:
+        this.observer.notifyMouseOverFrame(evt.getX(), evt.getY());
+    }//GEN-LAST:event_imgLabelMouseMoved
+
+    private void imgLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imgLabelMouseClicked
+        try {
+            // TODO add your handling code here:
+            this.observer.notifyMouseClickedFrame(evt.getButton());
+        } catch (IOException ex) {
+            Logger.getLogger(TrainCreatorForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_imgLabelMouseClicked
+
+    private void butSpeedUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butSpeedUpActionPerformed
+        // TODO add your handling code here:
+        this.observer.notifySpeedChange(true);
+    }//GEN-LAST:event_butSpeedUpActionPerformed
+
+    private void butSpeedDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butSpeedDownActionPerformed
+        // TODO add your handling code here:
+        this.observer.notifySpeedChange(false);
+    }//GEN-LAST:event_butSpeedDownActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton butSpeedDown;
+    private javax.swing.JButton butSpeedUp;
     private javax.swing.JLabel imgLabel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel labelFrameNum;
+    private javax.swing.JButton pauseBuffout;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getImgLabel() {
         return this.imgLabel;
+    }
+    
+    public void setFrameNum(int num) {
+        this.labelFrameNum.setText(Integer.toString(num));
     }
 }

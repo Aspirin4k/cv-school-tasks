@@ -5,13 +5,11 @@
  */
 package cv.school.tasks;
 
-import cv.school.tasks.digmodel.DigModel;
-import cv.school.tasks.digmodel.DigModel.Set;
 import cv.school.tasks.imgaligner.ImgAligner;
+import cv.school.tasks.traincreator.TrainCreator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.opencv.core.Core;
@@ -38,14 +36,7 @@ public class CvSchoolTasks {
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
-        DigModel model = new DigModel();
-        model.buildModel(Paths.get("train-labels.idx1-ubyte"),Paths.get("train-images.idx3-ubyte"));
-        model.testModel(Paths.get("train-labels.idx1-ubyte"),Paths.get("train-images.idx3-ubyte"));
-        model.testModel(Paths.get("t10k-labels.idx1-ubyte"),Paths.get("t10k-images.idx3-ubyte"));
-        System.out.println("Проверяем самопальные цифры...");
-        model.testModel(ImgLoader.loadData(Paths.get("handmade")));
-        
-   //     model.writeToDisk(Paths.get("output"));
+        TrainCreator tc = new TrainCreator("tc.json");
     }
     
     /**
