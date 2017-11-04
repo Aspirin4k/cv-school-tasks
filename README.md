@@ -1,4 +1,4 @@
-# Computer Vision School Tasks
+﻿# Computer Vision School Tasks
 Macroscop School 2017
 
 Репозиторий содержит домашние задания, выполненные в рамках школы компьютерного зрения Macroscop осенью 2017 года.
@@ -16,3 +16,8 @@ Macroscop School 2017
 
 * [OpenCV](https://opencv.org/releases.html) для Java
 * [liblinear](https://www.csie.ntu.edu.tw/~cjlin/liblinear/) для Java. Используется в задании 4
+* [jackson-core(http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.2/). Нужен для загрузки конфигурации для TrainCreator
+
+# Известные проблемы
+
+* VideoLoader под Windows может не мочь загрузить видео. Для фикса необходимо добавить ```opencv\build\x64\vc14\bin\``` в перменную окружения PATH. 
