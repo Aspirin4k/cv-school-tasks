@@ -1,0 +1,7 @@
+{
+  "initial_video": "videos/fire_positive/01.mp4",
+  "to_fps": 4,
+  "buffer_length": 1,
+  "rect_width": 128,
+  "output_dir": "train_cat"
+}

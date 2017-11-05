@@ -3,3 +3,4 @@
 !.gitignore
 !*.md
 !train_cat/*
+!*.json
