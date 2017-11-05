@@ -33,7 +33,7 @@ import org.opencv.videoio.Videoio;
  * @author Andew
  */
 public class TrainCreator {
-    private final double SPEED_CAP = 128;
+    private final double SPEED_CAP = 512;
     
     // Содержит настройки приложения
     private final TrainCreatorConfiguration config;
@@ -223,8 +223,6 @@ public class TrainCreator {
         if (!Files.exists(output) || !Files.isDirectory(output)) Files.createDirectories(output);
         
         long count = Files.list(output).count();
-        output = output.resolve(Long.toString(count));
-        if (!Files.exists(output) || !Files.isDirectory(output)) Files.createDirectories(output);
         
         double x = this.rectX / this.scaleKt - this.config.getRectWidth() / 2;
         double y = this.rectY / this.scaleKt - this.config.getRectWidth();
@@ -235,11 +233,21 @@ public class TrainCreator {
         int xint = (int)Math.floor(x);
         int yint = (int)Math.floor(y);
         
-        for (int i=0; i< this.frames.size(); i++)
-        {
-            Mat submat = this.frames.get(i).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
-            Imgcodecs.imwrite(output.toString() + "/" + Integer.toString(i) + ".png", submat);
-            submat.release();
+        if (this.config.getBufferLength() > 1) {
+            output = output.resolve(Long.toString(count));
+            if (!Files.exists(output) || !Files.isDirectory(output)) Files.createDirectories(output);
+            for (int i=0; i< this.frames.size(); i++)
+            {
+                Mat submat = this.frames.get(i).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
+                Imgcodecs.imwrite(output.toString() + "/" + Integer.toString(i) + ".png", submat);
+                submat.release();
+            }
+        }
+        else {
+            if (this.frames.size() > 0) {
+                Mat submat = this.frames.get(0).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
+                Imgcodecs.imwrite(output.toString() + "/" + Long.toString(count) + ".png", submat);
+            }
         }
     }
     
@@ -273,7 +281,7 @@ public class TrainCreator {
             while (true) {
                 tickTimeNew = System.currentTimeMillis();
                 framerateTimeNew = tickTimeNew;
-                if (tickTimeNew - tickTimeOld > 25)  {
+                if (tickTimeNew - tickTimeOld > 25 * speed)  {
                     if (framerateTimeNew - framerateTimeOld > (1000 / config.getToFps()) * speed)
                     {
                         if (!pause) {
