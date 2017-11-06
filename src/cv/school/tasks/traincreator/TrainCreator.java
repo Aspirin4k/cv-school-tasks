@@ -247,6 +247,7 @@ public class TrainCreator {
             if (this.frames.size() > 0) {
                 Mat submat = this.frames.get(0).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
                 Imgcodecs.imwrite(output.toString() + "/" + Long.toString(count) + ".png", submat);
+                submat.release();
             }
         }
     }

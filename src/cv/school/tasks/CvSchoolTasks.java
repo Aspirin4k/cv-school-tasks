@@ -5,11 +5,13 @@
  */
 package cv.school.tasks;
 
+import cv.school.tasks.catdogdetector.CatDogDetector;
 import cv.school.tasks.imgaligner.ImgAligner;
 import cv.school.tasks.traincreator.TrainCreator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.opencv.core.Core;
@@ -36,7 +38,9 @@ public class CvSchoolTasks {
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
-        TrainCreator tc = new TrainCreator("tc.json");
+    //    TrainCreator tc = new TrainCreator("tc.json");
+        CatDogDetector detector = new CatDogDetector();
+        detector.readOneByOne(Paths.get("train_cat/neg"));
     }
     
     /**
