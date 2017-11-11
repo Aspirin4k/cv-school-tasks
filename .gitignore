@@ -4,3 +4,4 @@
 !*.md
 !train_cat/neg/*.png
 !tc.json
+!train_fire/**
