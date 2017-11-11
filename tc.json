@@ -1,7 +1,7 @@
 {
-  "initial_video": "GOT.(S07E07).XviD.DUB.(qqss44).avi",
+  "initial_video": "fire_negative/_25.mp4",
   "to_fps": 4,
-  "buffer_length": 1,
-  "rect_width": 128,
-  "output_dir": "train_cat"
+  "buffer_length": 10,
+  "rect_width": 64,
+  "output_dir": "train_fire"
 }

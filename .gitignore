@@ -2,6 +2,7 @@
 !/src/**
 !.gitignore
 !*.md
-!train_cat/neg/*.png
+!train_cat/**
+
 !tc.json
 !train_fire/**
