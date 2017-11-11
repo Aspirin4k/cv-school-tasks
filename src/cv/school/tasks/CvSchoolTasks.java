@@ -38,9 +38,25 @@ public class CvSchoolTasks {
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
-        TrainCreator tc = new TrainCreator("tc.json");
-  //      CatDogDetector detector = new CatDogDetector();
-   //     detector.readOneByOne(Paths.get("train_cat/neg"));
+   //     TrainCreator tc = new TrainCreator("tc.json");
+        CatDogDetector catDetector = new CatDogDetector();
+        // Пытаемся загрузить модель, если уже тренировали
+        if (!catDetector.loadDetector(Paths.get("cat_model.mdl"))) {
+            catDetector.loadSet(Paths.get("train_cat/neg"), false);
+            catDetector.loadSet(Paths.get("train_cat/dog"), false);
+            catDetector.loadSet(Paths.get("train_cat/cat"), true);
+            System.out.println(
+                    String.format("Обучающая выборка содержит %d изображений с котами и %d без", 
+                            catDetector.getPositiveCount(), catDetector.getNegativeCount())
+            );
+            System.out.println("Обучаем котэ-детектор...");
+            catDetector.trainDetector();
+            catDetector.saveDetector();
+        }
+        
+        catDetector.preidct(Paths.get("train_cat/neg"), false);
+        catDetector.preidct(Paths.get("train_cat/dog"), false);
+        catDetector.preidct(Paths.get("train_cat/cat"), true);
     }
     
     /**

@@ -6,8 +6,11 @@
 package cv.school.tasks;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.stream.Stream;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -41,5 +44,34 @@ public class ImgLoader {
         }
         
         return resultList;
+    }
+    
+     /**
+     * Загружает изображения из папки по одному и выполняет указанное действие
+     * @param operation действие, которое будет выполнено для изображения
+     * @param path путь до папки
+     * @throws java.io.IOException
+     */
+    public static void readOneByOne(IImgLoadingOp operation, Path path) throws IOException {
+        // Каждый файл в директории
+        try (Stream<Path> paths = Files.walk(path)) {
+            paths.filter(Files::isRegularFile).forEach((file) -> {
+                // Сверяем расширение перед загрузкой
+                String filename = file.toString();
+                String extention = filename.substring(filename.lastIndexOf(".") + 1);
+                if (extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("png") ||
+                        extention.equalsIgnoreCase("bmp"))
+                {
+                    try {
+                        Mat mat;
+                        mat = Imgcodecs.imread(filename);
+                        operation.execute(mat);
+                    } catch (Exception ex) {
+                        // Есть битые изображения
+                        System.out.println(String.format("Ошибка %s в файле %s", ex.toString(), filename));
+                    }
+                }
+            });
+        }
     }
 }
