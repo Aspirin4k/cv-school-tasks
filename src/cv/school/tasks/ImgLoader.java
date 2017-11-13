@@ -36,9 +36,13 @@ public class ImgLoader {
                 String filename = child.getName();
                 String extention = filename.substring(filename.lastIndexOf(".") + 1);
                 if (extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("png") ||
-                        extention.equalsIgnoreCase("bmp"))
+                        extention.equalsIgnoreCase("bmp") || extention.equalsIgnoreCase("pgm"))
                 {
-                    resultList.put(filename,Imgcodecs.imread(child.getPath()));
+                    resultList.put(dirPath.toString() + filename,Imgcodecs.imread(child.getPath()));
+                }
+                
+                if (child.isDirectory()) {
+                    resultList.putAll(ImgLoader.loadData(child.toPath()));
                 }
             }
         }
@@ -60,7 +64,7 @@ public class ImgLoader {
                 String filename = file.toString();
                 String extention = filename.substring(filename.lastIndexOf(".") + 1);
                 if (extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("png") ||
-                        extention.equalsIgnoreCase("bmp"))
+                        extention.equalsIgnoreCase("bmp") || extention.equalsIgnoreCase("pgm"))
                 {
                     try {
                         Mat mat;
