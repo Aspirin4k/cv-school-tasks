@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.HOGDescriptor;
 
@@ -34,6 +35,8 @@ public class ImgLoadingHog implements IImgLoadingOp {
      */
     public void execute(Mat image) {
         Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.resize(image, image, new Size(64,64));
+        Imgproc.GaussianBlur(image, image, new Size(3,3), 0);
         MatOfFloat descriptors = new MatOfFloat();
         this.hog.compute(image, descriptors);
         this.data.add(descriptors);

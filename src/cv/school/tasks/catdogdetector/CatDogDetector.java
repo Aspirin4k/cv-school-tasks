@@ -44,7 +44,7 @@ public class CatDogDetector {
         this.negative = new ArrayList<>();
         this.positive = new ArrayList<>();
         this.hog = new HOGDescriptor(
-                new Size(128,128),    // Считаем одну гистограму для всей картинки
+                new Size(64,64),    // Считаем одну гистограму для всей картинки
                 new Size(32,32),      // Размер блока
                 new Size(16,16),      // Смещение, на которое может сдвигаться блок
                 new Size(16,16),      // Размер ячейки
@@ -69,6 +69,7 @@ public class CatDogDetector {
      */
     public boolean predict(Mat mat) {
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.GaussianBlur(mat, mat, new Size(3,3), 0);
         MatOfFloat descriptors = new MatOfFloat();
         this.hog.compute(mat, descriptors);
         mat.release();
@@ -186,7 +187,7 @@ public class CatDogDetector {
         param.nu = 0.5;
         param.C = 100;
         param.svm_type = svm_parameter.C_SVC;
-        param.kernel_type = svm_parameter.LINEAR;
+        param.kernel_type = svm_parameter.RBF;
         param.cache_size = 20000;
         param.eps = 0.001;
         

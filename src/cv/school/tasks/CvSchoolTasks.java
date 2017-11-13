@@ -54,9 +54,34 @@ public class CvSchoolTasks {
             catDetector.saveDetector();
         }
         
-        catDetector.preidct(Paths.get("train_cat/neg"), false);
-        catDetector.preidct(Paths.get("train_cat/dog"), false);
-        catDetector.preidct(Paths.get("train_cat/cat"), true);
+//        catDetector.preidct(Paths.get("train_cat/neg"), false);
+//        catDetector.preidct(Paths.get("train_cat/dog"), false);
+//        catDetector.preidct(Paths.get("train_cat/cat"), true);
+        
+        System.out.println("Ищем котов...");
+        ImgLoadingPredictWithWindow operation = new ImgLoadingPredictWithWindow(catDetector, "output/cat");
+        ImgLoader.readOneByOne(operation, Paths.get("task5/cat"));
+        ImgLoader.readOneByOne(operation, Paths.get("task5/dog"));
+        
+        CatDogDetector dogDetector = new CatDogDetector();
+        // Пытаемся загрузить модель, если уже тренировали
+        if (!dogDetector.loadDetector(Paths.get("dog_model.mdl"))) {
+            dogDetector.loadSet(Paths.get("train_cat/neg"), false);
+            dogDetector.loadSet(Paths.get("train_cat/dog"), true);
+            dogDetector.loadSet(Paths.get("train_cat/cat"), false);
+            System.out.println(
+                    String.format("Обучающая выборка содержит %d изображений с псами и %d без", 
+                            dogDetector.getPositiveCount(), dogDetector.getNegativeCount())
+            );
+            System.out.println("Обучаем песько-детектор...");
+            dogDetector.trainDetector();
+            dogDetector.saveDetector();
+        }
+        
+        System.out.println("Ищем песьков...");
+        ImgLoadingPredictWithWindow operationDog = new ImgLoadingPredictWithWindow(dogDetector, "output/dog");
+        ImgLoader.readOneByOne(operation, Paths.get("task5/cat"));
+        ImgLoader.readOneByOne(operation, Paths.get("task5/dog"));
     }
     
     /**
