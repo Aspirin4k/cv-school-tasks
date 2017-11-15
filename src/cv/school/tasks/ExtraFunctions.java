@@ -5,6 +5,13 @@
  */
 package cv.school.tasks;
 
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfDouble;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 /**
  * Дополнительные функции, не обязательно связанные с компьютерным зрением
  * @author aspid
@@ -95,5 +102,37 @@ public class ExtraFunctions {
           ret |= (int)bytes[i+offset] & 0xFF;
         }
         return ret;
+    }
+    
+    /**
+     * Нормализует изображение (Вычитание среднего и деление на отклонение)
+     * @param image исходное изображение
+     */
+    public static void normalizeImage(Mat image) {
+        MatOfDouble meanArr = new MatOfDouble();
+        MatOfDouble stdArr = new MatOfDouble();
+        Core.meanStdDev(image, meanArr, stdArr);
+        // Оно считает среднее и отклонение для каждого канала
+        // однако, сейчас используется только для черно-белого (1 канал)
+        // позже надо бы исправить под многоканальные изображения
+        double mean = meanArr.toArray()[0];
+        double std = stdArr.toArray()[0];
+        Double min = Double.NaN;
+        double[][] matrix = new double[image.rows()][];
+        for (int i=0; i < image.rows(); i++) {
+            matrix[i] = new double[image.cols()];
+            for (int j=0; j < image.cols(); j++) {
+                matrix[i][j] = (image.get(i, j)[0] - mean) / std;
+                if ((matrix[i][j] < min) || Double.isNaN(min)) min = matrix[i][j];
+            }
+        }
+        
+        for (int i=0; i< image.rows(); i++) {
+            for (int j=0; j< image.cols(); j++) {
+                image.put(i, j, matrix[i][j] + Math.abs(min));
+            }
+        }
+        
+        Imgcodecs.imwrite("test.jpg", image);
     }
 }
