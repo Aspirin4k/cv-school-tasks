@@ -8,9 +8,7 @@ package cv.school.tasks;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
-import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
 /**
  * Дополнительные функции, не обязательно связанные с компьютерным зрением

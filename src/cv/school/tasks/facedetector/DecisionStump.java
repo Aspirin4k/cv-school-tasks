@@ -15,12 +15,14 @@ import java.util.List;
  */
 public class DecisionStump {
     private double trheshold;
-    private final double polarity;
+    private double polarity;
     
     public DecisionStump(double t, double p) {
         this.trheshold = t;
         this.polarity = p;
     }
+    
+    public DecisionStump() {}
     
     /**
      * Обучение слабого классификатора
@@ -32,27 +34,47 @@ public class DecisionStump {
      */
     public double train(List<Double> X, List<Integer> Y, List<Double> W, List<Integer> indices) {
         // Сюда будут помещены ошибки
-        ArrayList<Double> Ms = new ArrayList<>(X.size());
+        ArrayList<Double> Ms1 = new ArrayList<>(X.size());
+        ArrayList<Double> Ms2 = new ArrayList<>(X.size());
         // X - не отсортирован!
         for (int i=0; i< X.size(); i++) {
             
-            double m = 0;
-            // Все что слева от порога, классифицированное как 1
+            double m1 = 0;
+            double m2 = 0;
+            // Все что слева от порога, классифицированное как 1 для polarity 1 и 0 для polarity -1
             for (int j=0; j< i; j++)
-                if (Y.get(indices.get(j)) == (this.polarity == 1 ? 1 : 0)) m += W.get(indices.get(j));
-            // Все что справа от порога (включая порог), классифицированное как 0
+                if (Y.get(indices.get(j)) == 1) {
+                    m1 += W.get(indices.get(j));
+                } else {
+                    m2 += W.get(indices.get(j));
+                }
+            // Все что справа от порога (включая порог)
             for (int j=i; j< X.size(); j++)
-                if (Y.get(indices.get(j)) == (this.polarity == 1 ? 0 : 1)) m += W.get(indices.get(j));
+                if (Y.get(indices.get(j)) == 0) {
+                    m1 += W.get(indices.get(j));
+                } else {
+                    m2 += W.get(indices.get(j));
+                }
             
-            Ms.add(m);
+            Ms1.add(m1);
+            Ms2.add(m2);
         }
-        int Mmin = Ms.indexOf(Collections.min(Ms));
+        int M1min = Ms1.indexOf(Collections.min(Ms1));
+        int M2min = Ms2.indexOf(Collections.min(Ms2));
+        int Mmin;
+        if (Ms1.get(M1min) < Ms2.get(M2min)) {
+            this.polarity = 1;
+            Mmin = M1min;
+        } else {
+            this.polarity = -1;
+            Mmin = M2min;
+        }
         this.trheshold = X.get(indices.get(Mmin));
-        return Ms.get(Mmin);
+        return this.polarity == 1 ? Ms1.get(M1min) : Ms2.get(M2min);
     }
     
-    public boolean classify(double x) {
-        return x * this.polarity >= this.trheshold * this.polarity;
+    public Integer classify(double x) {
+        return x * this.polarity >= this.trheshold * this.polarity ? 1 : 0;
     }
     
     public double getTrheshold() { return this.trheshold; }

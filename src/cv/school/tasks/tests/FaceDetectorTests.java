@@ -5,6 +5,7 @@
  */
 package cv.school.tasks.tests;
 
+import cv.school.tasks.facedetector.ArrayIndexComparator;
 import cv.school.tasks.facedetector.DecisionStump;
 import cv.school.tasks.facedetector.IntegralImage;
 import cv.school.tasks.facedetector.haar.HaarCross4S;
@@ -13,6 +14,7 @@ import cv.school.tasks.facedetector.haar.HaarHorizontal3S;
 import cv.school.tasks.facedetector.haar.HaarVertical2S;
 import cv.school.tasks.facedetector.haar.HaarVertical3S;
 import cv.school.tasks.facedetector.haar.IHaarFeature;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -133,28 +135,47 @@ public class FaceDetectorTests {
      */
     public static void testStump() {
         System.out.println("Тестирование пеньков..");
-        DecisionStump classifier1 = new DecisionStump(0,1);
-        Double[] X1 = {0.0, 1.0, 2.0, 3.0, 4.0};
-        Integer[] Y1 = {0, 0, 1, 1, 1};
-        Double[] W1 = {1.0, 1.0, 1.0, 1.0, 1.0};
+        DecisionStump classifier1 = new DecisionStump();
+        Double[] X1 =   {0.0, 1.0, 2.0, 3.0, 4.0};
+        Integer[] Y1 =  {0, 0, 1, 1, 1};
+        Double[] W1 =   {1.0, 1.0, 1.0, 1.0, 1.0};
         Integer[] indices1 = {0, 1, 2, 3, 4};
         double error1 = classifier1.train(Arrays.asList(X1), Arrays.asList(Y1),Arrays.asList(W1), Arrays.asList(indices1));
         System.out.println(String.format("Минимальная ошибка %f. Threshold: %f. Polarity: %f", error1, classifier1.getTrheshold(), classifier1.getPolarity()));
         
-        DecisionStump classifier2 = new DecisionStump(0,-1);
-        Double[] X2 = {0.0, 1.0, 2.0, 3.0, 4.0};
-        Integer[] Y2 = {1, 1, 0, 0, 0};
-        Double[] W2 = {1.0, 1.0, 1.0, 1.0, 1.0};
+        DecisionStump classifier2 = new DecisionStump();
+        Double[] X2 =   {0.0, 1.0, 2.0, 3.0, 4.0};
+        Integer[] Y2 =  {1, 1, 0, 0, 0};
+        Double[] W2 =   {1.0, 1.0, 1.0, 1.0, 1.0};
         Integer[] indices2 = {0, 1, 2, 3, 4};
         double error2 = classifier2.train(Arrays.asList(X2), Arrays.asList(Y2),Arrays.asList(W2), Arrays.asList(indices2));
         System.out.println(String.format("Минимальная ошибка %f. Threshold: %f. Polarity: %f", error2, classifier2.getTrheshold(), classifier2.getPolarity()));
         
-        DecisionStump classifier3 = new DecisionStump(0,1);
-        Double[] X3 = {0.0, 1.0, 2.0, 3.0, 4.0};
-        Integer[] Y3 = {0, 1, 0, 1, 1};
-        Double[] W3 = {1.0, 1.0, 10.0, 1.0, 1.0};
+        DecisionStump classifier3 = new DecisionStump();
+        Double[] X3 =   {0.0, 1.0, 2.0, 3.0, 4.0};
+        Integer[] Y3 =  {0, 1, 0, 1, 1};
+        Double[] W3 =   {1.0, 1.0, 10.0, 1.0, 1.0};
         Integer[] indices3 = {0, 1, 2, 3, 4};
         double error3 = classifier3.train(Arrays.asList(X3), Arrays.asList(Y3),Arrays.asList(W3), Arrays.asList(indices3));
         System.out.println(String.format("Минимальная ошибка %f. Threshold: %f. Polarity: %f", error3, classifier3.getTrheshold(), classifier3.getPolarity()));
+    }
+    
+    public static void testSort() {
+        System.out.println("Тестирование корректности сортировки..");
+        Double[] x = {
+            3.0, 4.0, 1.0, 2.0, 5.0
+        };
+        for (int i=0; i<x.length; i++)
+            System.out.print(x[i] + " ");
+        System.out.println();
+        
+        ArrayIndexComparator comparator = new ArrayIndexComparator(new ArrayList<>(Arrays.asList(x)));
+        ArrayList<Integer> indexes = comparator.createIndexArray();
+        indexes.sort(comparator);
+        
+        System.out.println("Перестановка, которая приводит массив в упорядоченное состояние:");
+        for (int i=0; i<indexes.size(); i++)
+            System.out.print(indexes.get(i) + " ");
+        System.out.println();
     }
 }

@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -146,30 +147,6 @@ public class FaceDetector {
         }
     }
     
-    public void trainClassifier() {
-        ArrayList<ArrayList<Double>> X = new ArrayList<>(this.negativesHaar.size() + this.positivesHaar.size());
-        ArrayList<Integer> Y = new ArrayList<>(this.negativesHaar.size() + this.positivesHaar.size());
-        ArrayList<Double> W = new ArrayList<>(this.negativesHaar.size() + this.positivesHaar.size());
-        this.negativesHaar.forEach((h) -> {
-            X.add(h);
-            Y.add(0);
-            W.add(2.0);
-        });
-        this.positivesHaar.forEach((h) -> { 
-            X.add(h);
-            Y.add(1);
-            W.add(2.0);
-        });
-        
-        ArrayList<Double> Xi = new ArrayList<>(X.size());
-        X.forEach((x) ->{
-            Xi.add(x.get(0));
-        });
-        ArrayIndexComparator comparator = new ArrayIndexComparator(Xi);
-        ArrayList<Integer> indexes = comparator.createIndexArray();
-        indexes.sort(comparator);
-    }
-    
     /**
      * Загружает признаки хаара из директории
      * @param path путь до директории загрузки
@@ -255,20 +232,11 @@ public class FaceDetector {
      */
     public final void computeHaarFeatures(ArrayList<ArrayList<Double>> features, IntegralImage[] imgs) throws IOException {
         if (DEBUG) System.out.println("Начинаем вычисление признаков Хаара..");
-        // Пока захардкожено
-        boolean pos = !Files.exists(Paths.get("haars").resolve("pos"));
-        if (pos) Files.createDirectories(Paths.get("haars").resolve("pos"));
-        else Files.createDirectories(Paths.get("haars").resolve("neg"));
         for (int i=0; i < imgs.length; i++)
         {
             ArrayList<Double> imgFeatures = new ArrayList<>();
             this.computeHaarFeature(imgFeatures, imgs[i]);
             features.add(imgFeatures);
-            try (PrintWriter out = (pos ? new PrintWriter ("haars/pos/" + Integer.toString(i)) : new PrintWriter ("haars/neg/" + Integer.toString(i))))  {
-                out.println(imgFeatures.size());
-                for (int j=0; j< imgFeatures.size(); j++)
-                    out.print(imgFeatures.get(j) + " ");
-            }
         }
     }
     
@@ -281,8 +249,8 @@ public class FaceDetector {
     private void computeHaarFeature(ArrayList<Double> features, IntegralImage img) {
         final int X_STEP = 3;
         final int Y_STEP = 3;
-        final int W_STEP = 1;
-        final int H_STEP = 1;
+        final int W_STEP = 3;
+        final int H_STEP = 3;
         
         for (IHaarFeature fet : this.haar) {
             for (int x=0; x < WINDOW_SIZE; x += X_STEP) {
@@ -296,5 +264,48 @@ public class FaceDetector {
                 }
             }
         }
+    }
+    
+    /**
+     * Обучает детектор
+     * @throws java.io.IOException
+     */
+    public void learnDetector() throws IOException {
+        ArrayList<ArrayList<Double>> X = new ArrayList<>(2000);
+        ArrayList<Integer> Y = new ArrayList<>(2000);
+        ArrayList<Double> W = new ArrayList<>(2000);
+        this.negativesHaar.subList(0, 1000).forEach((h) -> {
+            X.add(h);
+            Y.add(0);
+            W.add(1.0);
+        });
+        this.positivesHaar.subList(0, 1000).forEach((h) -> { 
+            X.add(h);
+            Y.add(1);
+            W.add(1.0);
+        });
+        
+        Boosting boost = new Boosting(X, Y, W);
+        boost.learnBoosting();
+        boost.save(Paths.get("forest"));
+    }
+    
+    /**
+     * Вспомогательный класс для хранения информации о классификаторе
+     */
+    public static class ClassifierStructure {
+        private final int index;
+        private final Double error;
+        private final DecisionStump model;
+        
+        public ClassifierStructure(int index, Double error, DecisionStump model) {
+            this.index = index;
+            this.error = error;
+            this.model = model;
+        }
+        
+        public int getIndex()           { return this.index; }
+        public Double getError()        { return this.error; }
+        public DecisionStump getModel() { return this.model; }
     }
 }

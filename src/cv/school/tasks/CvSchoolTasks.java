@@ -43,14 +43,16 @@ public class CvSchoolTasks {
         FaceDetectorTests.testIntegral();
         FaceDetectorTests.testHaar();
         FaceDetectorTests.testStump();
+        FaceDetectorTests.testSort();
    //     TrainCreator tc = new TrainCreator("tc.json"); 
-//        FaceDetector detector;
-//        if (Files.notExists(Paths.get("haars"))) {
-//            detector = new FaceDetector(Paths.get("data/positives"), Paths.get("data/negatives"));
-//            detector.saveHaarFeatures(Paths.get("haars"));
-//        } else {
-//            detector = new FaceDetector(Paths.get("haars"));
-//        } 
+        FaceDetector detector;
+        if (Files.notExists(Paths.get("haars"))) {
+            detector = new FaceDetector(Paths.get("data/positives"), Paths.get("data/negatives"));
+            detector.saveHaarFeatures(Paths.get("haars"));
+        } else {
+            detector = new FaceDetector(Paths.get("haars"));
+        } 
+        detector.learnDetector();
     }
     
     /**

@@ -22,7 +22,7 @@ public class ArrayIndexComparator implements Comparator<Integer> {
     
     public ArrayList<Integer> createIndexArray() {
         ArrayList<Integer> indexes = new ArrayList<>(this.array.size());
-        for (int i=0; i< indexes.size(); i++) {
+        for (int i=0; i< this.array.size(); i++) {
             indexes.add(i,i);
         }
         return indexes;
