@@ -234,13 +234,19 @@ public class TrainCreator {
         int yint = (int)Math.floor(y);
         
         if (this.config.getBufferLength() > 1) {
-            output = output.resolve(Long.toString(count));
-            if (!Files.exists(output) || !Files.isDirectory(output)) Files.createDirectories(output);
-            for (int i=0; i< this.frames.size(); i++)
-            {
-                Mat submat = this.frames.get(i).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
-                Imgcodecs.imwrite(output.toString() + "/" + Integer.toString(i) + ".png", submat);
+            if (this.config.getBufferLength() == 1) {
+                Mat submat = this.frames.get(0).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
+                Imgcodecs.imwrite(output.toString() + "/" + count + ".png", submat);
                 submat.release();
+            } else {
+                output = output.resolve(Long.toString(count));
+                if (!Files.exists(output) || !Files.isDirectory(output)) Files.createDirectories(output);
+                for (int i=0; i< this.frames.size(); i++)
+                {
+                    Mat submat = this.frames.get(i).submat(yint, yint+ this.config.getRectWidth(), xint,  xint+ this.config.getRectWidth());
+                    Imgcodecs.imwrite(output.toString() + "/" + Integer.toString(i) + ".png", submat);
+                    submat.release();
+                }
             }
         }
         else {

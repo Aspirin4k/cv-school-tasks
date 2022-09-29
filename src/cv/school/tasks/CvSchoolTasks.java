@@ -40,19 +40,19 @@ public class CvSchoolTasks {
     public static void main(String[] args) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         // Проверка работоспособности
-        FaceDetectorTests.testIntegral();
-        FaceDetectorTests.testHaar();
-        FaceDetectorTests.testStump();
-        FaceDetectorTests.testSort();
-   //     TrainCreator tc = new TrainCreator("tc.json"); 
-        FaceDetector detector;
-        if (Files.notExists(Paths.get("haars"))) {
-            detector = new FaceDetector(Paths.get("data/positives"), Paths.get("data/negatives"));
-            detector.saveHaarFeatures(Paths.get("haars"));
-        } else {
-            detector = new FaceDetector(Paths.get("haars"));
-        } 
-        detector.learnDetector();
+//        FaceDetectorTests.testIntegral();
+//        FaceDetectorTests.testHaar();
+//        FaceDetectorTests.testStump();
+//        FaceDetectorTests.testSort();
+        TrainCreator tc = new TrainCreator("tc.json");
+//        FaceDetector detector;
+//        if (Files.notExists(Paths.get("haars"))) {
+//            detector = new FaceDetector(Paths.get("data/positives"), Paths.get("data/negatives"));
+//            detector.saveHaarFeatures(Paths.get("haars"));
+//        } else {
+//            detector = new FaceDetector(Paths.get("haars"));
+//        }
+//        detector.learnDetector();
     }
     
     /**

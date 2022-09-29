@@ -14,9 +14,10 @@ Macroscop School 2017
 
 Для того, чтобы собрать проект на локальной машине, необходимо дополнительно установить библиотеки:
 
-* [OpenCV](https://opencv.org/releases.html) для Java
+* Java 8
+* [OpenCV](https://opencv.org/releases.html) для Java (2.4.*)
 * [liblinear](https://www.csie.ntu.edu.tw/~cjlin/liblinear/) для Java. Используется в задании 4
-* [jackson-core](http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.2/). Нужен для загрузки конфигурации для TrainCreator
+* [jackson-core](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.2/). Нужен для загрузки конфигурации для TrainCreator
 
 # Известные проблемы
 
